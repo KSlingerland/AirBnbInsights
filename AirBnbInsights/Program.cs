@@ -1,7 +1,8 @@
 using AirBnbInsights;
+using AirBnbInsights.Data;
 using AirBnbInsights.Database;
+using GraphQL;
 using Microsoft.OpenApi.Models;
-using ZiggyCreatures.Caching.Fusion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,36 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterModules();
+
 builder.Services.AddDbContext<AirBnbContext>();
 
-// CONNECTION STRINGS
-var sqlConn = builder.Configuration.GetConnectionString("Sql");
-var redisConn = builder.Configuration.GetConnectionString("Redis");
-
-if (string.IsNullOrWhiteSpace(sqlConn))
-    throw new NullReferenceException("You must specify a sql connection (see appsettings.json)");
-
-// ADD SERVICES: REDIS
-if (string.IsNullOrWhiteSpace(redisConn) == false)
-{
-    // ADD SERVICES: REDIS DISTRIBUTED CACHE
-    builder.Services.AddStackExchangeRedisCache(options =>
-    {
-        options.Configuration = redisConn;
-    });
-
-    // ADD SERVICES: JSON SERIALIZER
-    builder.Services.AddFusionCacheSystemTextJsonSerializer();
-
-    // ADD SERVICES: REDIS BACKPLANE
-    builder.Services.AddFusionCacheStackExchangeRedisBackplane(options =>
-    {
-        options.Configuration = redisConn;
-    });
-}
-
-// ADD SERVICES: FUSIONCACHE
-builder.Services.AddFusionCache().TryWithAutoSetup();
+builder.Services.AddGraphQL(b => b
+    .AddAutoSchema<Query>()
+    .AddSystemTextJson());
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -51,6 +28,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.UseGraphQL("/graphql");
     
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
