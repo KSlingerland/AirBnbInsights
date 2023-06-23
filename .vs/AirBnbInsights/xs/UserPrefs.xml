@@ -1,0 +1,38 @@
+﻿<Properties StartupConfiguration="{7AE2996F-83A8-472F-970E-20E602ECC113}|Default">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>AirBnbInsights/AirBnbInsights.csproj</String>
+  </DisabledProjects>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.API.AirBnbInsights PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="API.AirBnbInsights/Controllers/ListingsController.cs">
+    <Files>
+      <File FileName="API.AirBnbInsights/Models/Listing.cs" />
+      <File FileName="API.AirBnbInsights/appsettings.json" />
+      <File FileName="API.AirBnbInsights/Program.cs" />
+      <File FileName="API.AirBnbInsights/Models/ListingDTO.cs" />
+      <File FileName="API.AirBnbInsights/Properties/launchSettings.json" />
+      <File FileName="API.AirBnbInsights/Data/InsightsDbContext.cs" />
+      <File FileName="API.AirBnbInsights/Controllers/ListingsController.cs" Line="98" Column="10" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="AirBnbInsights" expanded="True">
+            <Node name="API.AirBnbInsights" expanded="True">
+              <Node name="Controllers" expanded="True">
+                <Node name="ListingsController.cs" selected="True" />
+              </Node>
+              <Node name="Data" expanded="True" />
+              <Node name="Models" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

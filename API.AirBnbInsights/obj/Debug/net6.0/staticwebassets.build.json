@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "0qnD9K9CTTKm5V7NeAKJaTnR2r9uLxqD+GP74Tcz/2k=",
+  "Source": "API.AirBnbInsights",
+  "BasePath": "_content/API.AirBnbInsights",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
