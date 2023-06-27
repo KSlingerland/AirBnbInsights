@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Filter from "./Filter";
 
 const Listing =  () => {
     const { listingid } = useParams();
@@ -8,7 +7,7 @@ const Listing =  () => {
 
     useEffect(() => {
         const fetchListing = async () => {
-            const response = await fetch(`https://localhost:7158/api/listings/${listingid}`)
+            const response = await fetch(`${process.env.REACT_APP_API}/listings/${listingid}`)
             setListingData(await response.json())
         }
 

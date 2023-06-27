@@ -1,18 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Chart } from "react-charts";
 
 const HostsBar = () => {
-  const [chartData, setChartData] = useState()
-
-  useEffect(() => {
-    const fetchChart = async () => {
-        const response = await fetch(`https://localhost:7158/api/charts/neighbourhoods`)
-        setChartData(response)
-    }
-    console.log(chartData)
-    fetchChart()
-}, [])
-
   var data = [
     {
       label: "Neibourhoods",

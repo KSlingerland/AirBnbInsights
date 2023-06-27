@@ -36,7 +36,7 @@ const Map = () => {
 
       map.current.addSource('listings', {
         type: "geojson",
-        data: "https://localhost:7158/api/listings"
+        data: `${process.env.REACT_APP_API}/listings`
       })
 
       map.current.addLayer({
@@ -107,7 +107,7 @@ const Map = () => {
       map.current.getCanvas().style.cursor = '';
       });
     })
-  }, []);
+  });
 
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize

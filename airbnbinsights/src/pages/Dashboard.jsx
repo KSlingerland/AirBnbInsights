@@ -1,13 +1,12 @@
 import {
     AuthenticatedTemplate,
     UnauthenticatedTemplate,
-    useIsAuthenticated,
   } from "@azure/msal-react";
 import Charts from '../components/Charts'
 import SignInSignOutButton from "../components/ui-components/SignInSignOutButton";
 
 const Dashboard = () => {
-    const Authenticated = useIsAuthenticated();
+    // const Authenticated = useIsAuthenticated();
     return (
         <>
             <AuthenticatedTemplate>
