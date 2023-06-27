@@ -9,10 +9,6 @@ body { margin: 0; padding: 0; }
     display: flex;
 }
 
-canvas, .mapboxgl-canvas {
-    height: 100%;
-  }
-
     .mapboxgl-popup {
         max-width: 400px;
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -130,6 +126,7 @@ canvas, .mapboxgl-canvas {
         display: flex;
         flex-direction: column;
         align-self: stretch;
+        overflow-y: scroll;
       }
       
       #sidebar > * {

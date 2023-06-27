@@ -27,7 +27,7 @@ namespace API.AirBnbInsights.Controllers
 
         // GET: api/Listings
         [HttpGet]
-        public async Task<IActionResult> GetListings()
+        public async Task<ActionResult<GeoJsonResponse>> GetListings()
         {
             if (_context.Listings == null)
             {
@@ -80,14 +80,7 @@ namespace API.AirBnbInsights.Controllers
           {
               return NotFound();
           }
-            var listing = await _cache.GetOrSetAsync<Listing>(
-                $"listing:{id}",
-                await _context.Listings.FindAsync(id),
-                options => options
-                    .SetPriority(CacheItemPriority.High)
-                    .SetFailSafe(true, TimeSpan.FromHours(2))
-                    .SetFactoryTimeouts(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(2))
-                );
+            var listing = await _cache.GetOrSetAsync($"listing:{id}", await _context.Listings.FindAsync(id));
 
             if (listing == null)
             {

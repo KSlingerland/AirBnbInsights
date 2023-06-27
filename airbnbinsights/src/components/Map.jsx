@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import Filter from './Filter';
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3NsaW5nZXJsYW5kIiwiYSI6ImNsajQ0dmI0NjBheWYzZW1qMjJ1ZWZwbXQifQ.Bkgu770BSa64RJvRjY1JfA';
 
 const Map = () => {
@@ -49,29 +50,30 @@ const Map = () => {
         type: 'circle',
         source: 'listings'
       })
+
       // Create a popup, but don't add it to the map yet.
-const popup = new mapboxgl.Popup({
-  closeButton: false
-  });
+      const popup = new mapboxgl.Popup({
+        closeButton: false
+        });
 
       // When a click event occurs on a feature in the places layer, open a popup at the
-    // location of the feature, with description HTML from its properties.
-    map.current.on('mousemove', 'listings-layer', (e) => {
-      // Change the cursor style as a UI indicator.
-      map.current.getCanvas().style.cursor = 'pointer';
-      // Copy coordinates array.
-      const coordinates = e.features[0].geometry.coordinates.slice();
-      const title = e.features[0].properties.name;
-      const hostName = e.features[0].properties.hostname
-      const price = e.features[0].properties.price
-      const id = e.features[0].properties.id
-      
-      // Ensure that if the map is zoomed out such that multiple
-      // copies of the feature are visible, the popup appears
-      // over the copy being pointed to.
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
+      // location of the feature, with description HTML from its properties.
+      map.current.on('mousemove', 'listings-layer', (e) => {
+        // Change the cursor style as a UI indicator.
+        map.current.getCanvas().style.cursor = 'pointer';
+        // Copy coordinates array.
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const title = e.features[0].properties.name;
+        const hostName = e.features[0].properties.hostname
+        const price = e.features[0].properties.price
+        const id = e.features[0].properties.id
+        
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
       
       popup
       .setLngLat(coordinates)
@@ -107,10 +109,6 @@ const popup = new mapboxgl.Popup({
     })
   }, []);
 
-  const markerClicked = (title) => {
-    window.alert(title);
-  };
-
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     map.current.on('move', () => {
@@ -123,7 +121,10 @@ const popup = new mapboxgl.Popup({
   });
 
   return (
+    <div style={{display: "flex", width: "100%"}}>
+      <Filter/>
       <div ref={mapContainer} className="map-container" id='map'/>
+    </div>
   );
 }
 
