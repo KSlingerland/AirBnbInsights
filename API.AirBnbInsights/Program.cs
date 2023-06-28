@@ -7,17 +7,17 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.NewtonsoftJson;
 
-var AllowSpecificOrigins = "CorsPolicy";
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Modify CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowSpecificOrigins,
-        policy =>
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        builder =>
         {
-            policy.WithOrigins("https://polite-pebble-0f8a1d003.3.azurestaticapps.net")
+            builder.WithOrigins("https://polite-pebble-0f8a1d003.3.azurestaticapps.net")
             .AllowAnyHeader()
             .WithMethods("GET")
             .AllowCredentials();
@@ -75,7 +75,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(AllowSpecificOrigins);
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 
