@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: AllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("https://polite-pebble-0f8a1d003.3.azurestaticapps.net/")
+            policy.WithOrigins("https://polite-pebble-0f8a1d003.3.azurestaticapps.net")
             .AllowAnyHeader()
             .WithMethods("GET")
             .AllowCredentials();
