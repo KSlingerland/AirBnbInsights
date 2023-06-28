@@ -1,4 +1,5 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 // MSAL imports
 import { MsalProvider } from "@azure/msal-react";
@@ -18,11 +19,15 @@ function App({ pca }) {
   const navigationClient = new CustomNavigationClient(navigate);
   pca.setNavigationClient(navigationClient);
 
+  const queryClient = new QueryClient()
+
   return (
-    <MsalProvider instance={pca}>
-      <NavBar />
-      <Pages />
-    </MsalProvider>
+    <QueryClientProvider client={queryClient}>
+      <MsalProvider instance={pca}>
+        <NavBar />
+        <Pages />
+      </MsalProvider>
+    </QueryClientProvider>
   )
 }
 

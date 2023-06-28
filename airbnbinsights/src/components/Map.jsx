@@ -3,128 +3,189 @@ import { useNavigate } from 'react-router-dom';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import Filter from './Filter';
+
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3NsaW5nZXJsYW5kIiwiYSI6ImNsajQ0dmI0NjBheWYzZW1qMjJ1ZWZwbXQifQ.Bkgu770BSa64RJvRjY1JfA';
 
 const Map = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  const [map, setMap] = useState(null);
   const [lng, setLng] = useState(0.1268);
   const [lat, setLat] = useState(51.5045);
   const [zoom, setZoom] = useState(9);
 
+  const [filters, setFilters] = useState({
+    category: '',
+    dateRange: '',
+    // Add more filter properties as needed
+  });
 
   useEffect(() => {
-    if (map.current) return; // initialize map only once
-    map.current = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [lng, lat],
-      zoom: zoom
-    });
+    if (map) return; // initialize map only once
 
-    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
-
-    map.current.on('load', () => {
-        map.current.resize();
-      map.current.addSource('neighbourhoods', {
-        type: 'geojson',
-        data: './neighbourhoods.geojson'
-      })
-
-      map.current.addSource('listings', {
-        type: "geojson",
-        data: `${process.env.REACT_APP_API}/listings`
-      })
-
-      map.current.addLayer({
-        'id': 'neighbourhood-layer',
-        'type': 'line',
-        'source': 'neighbourhoods',
+    const initializeMap = ({ setMap, mapContainer }) => {
+      const map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: [lng, lat],
+        zoom: zoom
       });
 
-      map.current.addLayer({
-        id: 'listings-layer',
-        type: 'circle',
-        source: 'listings'
-      })
+      map.addControl(new mapboxgl.NavigationControl(), "top-right");
+  
+      map.on('load', () => {
+        setMap(map);
+        map.resize();
 
-      // Create a popup, but don't add it to the map yet.
-      const popup = new mapboxgl.Popup({
-        closeButton: false
+        map.addSource('neighbourhoods', {
+          type: 'geojson',
+          data: '/./neighbourhoods.geojson'
+        })
+    
+        map.addSource('listings', {
+          type: "geojson",
+          data: `${process.env.REACT_APP_API}/listings`
+        })
+
+        map.addLayer({
+          'id': 'neighbourhood-layer',
+          'type': 'line',
+          'source': 'neighbourhoods',
         });
+    
+        map.addLayer({
+          id: 'listings-layer',
+          type: 'circle',
+          source: 'listings'
+        })
+      });
+    };
+    if (!map) initializeMap({ setMap, mapContainer });
+    // eslint-disable-next-line
+  }, [map]);
 
-      // When a click event occurs on a feature in the places layer, open a popup at the
-      // location of the feature, with description HTML from its properties.
-      map.current.on('mousemove', 'listings-layer', (e) => {
-        // Change the cursor style as a UI indicator.
-        map.current.getCanvas().style.cursor = 'pointer';
-        // Copy coordinates array.
-        const coordinates = e.features[0].geometry.coordinates.slice();
-        const title = e.features[0].properties.name;
-        const hostName = e.features[0].properties.hostname
-        const price = e.features[0].properties.price
-        const id = e.features[0].properties.id
-        
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
+  useEffect(() => {
+    if (!map) return;
+    // Create a popup, but don't add it to the map yet.
+    const popup = new mapboxgl.Popup({
+      closeButton: false
+      });
+
+    // When a click event occurs on a feature in the places layer, open a popup at the
+    // location of the feature, with description HTML from its properties.
+    map.on('mousemove', 'listings-layer', (e) => {
+      // Change the cursor style as a UI indicator.
+      map.getCanvas().style.cursor = 'pointer';
+      // Copy coordinates array.
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const id = e.features[0].properties.id;
       
+      // Ensure that if the map is zoomed out such that multiple
+      // copies of the feature are visible, the popup appears
+      // over the copy being pointed to.
+      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      }
+    
       popup
       .setLngLat(coordinates)
       .setHTML(
         "<div>" + 
-          "<p>" + title + id +"</p>" +
-          "<p>" + hostName + "</p>" +
-          "<strong><p>" + price + "</p></strong>" +
+          "<p>" + id +"</p>" +
         "</div>" 
       )
-      .addTo(map.current);
+      .addTo(map);
     });
 
-    map.current.on('mouseleave', 'listings-layer', () => {
-      map.current.getCanvas().style.cursor = '';
-      popup.remove();
-      });
+  map.on('mouseleave', 'listings-layer', () => {
+    map.getCanvas().style.cursor = '';
+    popup.remove();
+    });
 
-      map.current.on('click', 'listings-layer', (e) => {
-        console.log(e)
-        navigate(`/listing/${e.features[0].properties.id}`)
-      })
-      
-      // Change the cursor to a pointer when the mouse is over the places layer.
-      map.current.on('mouseenter', 'places', () => {
-      map.current.getCanvas().style.cursor = 'pointer';
-      });
-      
-      // Change it back to a pointer when it leaves.
-      map.current.on('mouseleave', 'places', () => {
-      map.current.getCanvas().style.cursor = '';
-      });
+    map.on('click', 'listings-layer', (e) => {
+      console.log(e)
+      navigate(`/listing/${e.features[0].properties.id}`)
     })
-  });
+    
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    map.on('mouseenter', 'places', () => {
+    map.getCanvas().style.cursor = 'pointer';
+    });
+    
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'places', () => {
+    map.getCanvas().style.cursor = '';
+    });
+  })
 
   useEffect(() => {
-    if (!map.current) return; // wait for map to initialize
-    map.current.on('move', () => {
-      setLng(map.current.getCenter().lng.toFixed(4));
-      setLat(map.current.getCenter().lat.toFixed(4));
-      setZoom(map.current.getZoom().toFixed(2));
+    if (!map) return; // wait for map to initialize
+    map.on('move', () => {
+      setLng(map.getCenter().lng.toFixed(4));
+      setLat(map.getCenter().lat.toFixed(4));
+      setZoom(map.getZoom().toFixed(2));
     });
 
     console.log(lng, lat, zoom)
   });
 
+  useEffect(() => {
+    if (!map) return; 
+    // Apply filters whenever they change
+    if (map) {
+      const filteredData = filterData(); // Implement your filtering logic here based on the filter state
+      map.getSource('listings').setData(filteredData)
+    }
+    // eslint-disable-next-line
+  }, [filters]);
+
+  const filterData = () => {
+    const { category } = filters;
+
+    // Filter based on category
+    let filteredData = map.querySourceFeatures('listings');
+    console.log(filteredData)
+
+    if (category) {
+      filteredData = filteredData.filter(item => item.properties.neighbourhood === category);
+      console.log(filteredData)
+    }
+    // Return the filtered data as a GeoJSON object
+    return {
+      type: 'FeatureCollection',
+      features: filteredData.map(item => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [item.geometry.coordinates[1], item.geometry.coordinates[0]],
+        },
+        properties: {
+
+        },
+    })),
+    }
+  };
+
+  const handleCategoryChange = (event) => {
+    setFilters({ ...filters, category: event.target.value });
+  };
+
   return (
-    <div style={{display: "flex", width: "100%"}}>
-      <Filter/>
+    <>
       <div ref={mapContainer} className="map-container" id='map'/>
-    </div>
+      <div>
+        <label>
+          Neighbourhood:
+          <select value={filters.category} onChange={handleCategoryChange}>
+            <option value="">All</option>
+            <option value="Westminster">Westminster</option>
+            <option value="Greenwich">Category 2</option>
+            {/* Add more options as needed */}
+          </select>
+        </label>
+      </div>
+    </>
   );
 }
 

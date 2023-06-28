@@ -8,13 +8,13 @@ import { Rating, Slider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 
 const Filter = () => {
-    const [age, setAge] = React.useState('');
+    const [neighbourHood, setNeighbourhood] = React.useState('');
     const [value, setValue] = React.useState(0);
     const [hover, setHover] = React.useState(-1);
     const [slider, setSlider] = React.useState([20, 200]);
     
     const handleChange = (event) => {
-    setAge(event.target.value);
+    setNeighbourhood(event.target.value);
   };
 
   const handleSlider = (event, newValue) => {
@@ -50,7 +50,7 @@ const Filter = () => {
                 <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={age}
+                value={neighbourHood}
                 label="Neighbourhoods"
                 onChange={handleChange}
                 >

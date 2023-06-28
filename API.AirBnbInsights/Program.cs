@@ -1,19 +1,27 @@
 ﻿using API.AirBnbInsights.Models;
+using API.AirBnbInsights.Repositories;
+using API.AirBnbInsights.Repositories.Interfaces;
+using API.AirBnbInsights.Services;
+using API.AirBnbInsights.Services.Interfaces;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using ZiggyCreatures.Caching.Fusion;
 using ZiggyCreatures.Caching.Fusion.Serialization.NewtonsoftJson;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var AllowSpecificOrigins = "CorsPolicy";
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Modify CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("*");
-                      });
+    options.AddPolicy(name: AllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("https://polite-pebble-0f8a1d003.3.azurestaticapps.net/")
+            .AllowAnyHeader()
+            .WithMethods("GET")
+            .AllowCredentials();
+        });
 });
 
 // Add services to the container.
@@ -24,13 +32,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<InsightsDbContext>();
+builder.Services.AddScoped<IListingRepository ,ListingRepository>();
+builder.Services.AddScoped<IChartsService, ChartsService>();
 
 builder.Services.AddFusionCache()
     .WithSerializer(
         new FusionCacheNewtonsoftJsonSerializer()
     )
     .WithDistributedCache(
-        new RedisCache(new RedisCacheOptions { Configuration = "127.0.0.1:6379" })
+        new RedisCache(new RedisCacheOptions { Configuration = builder.Configuration.GetConnectionString("Redis") })
     )
     .WithDefaultEntryOptions(new FusionCacheEntryOptions
     {
@@ -43,6 +53,19 @@ builder.Services.AddFusionCache()
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("X-Frame-Options", "deny");
+    context.Response.Headers.Add("Content-Security-Policy", "default-src https: data: blob: 'unsafe-inline' 'self'");
+    context.Response.Cookies.Append("cookieName", "cookieValue", new CookieOptions
+    {
+        SameSite = SameSiteMode.None,
+        Secure = !app.Environment.IsDevelopment(),
+    });
+    context.Response.Headers.Remove("X-Powered-By");
+    await next.Invoke();
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -52,7 +75,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(AllowSpecificOrigins);
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -40,20 +40,8 @@ namespace API.AirBnbInsights.Models
         [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("hostname")]
-        public string HostName { get; set; }
-
-        [JsonProperty("roomtype")]
-        public string RoomType { get; set; }
-
-        [JsonProperty("price")]
-        public string Price { get; set; }
-
-        [JsonProperty("accomodates")]
-        public int? Accomodates { get; set; }
+        [JsonProperty("neighbourhood")]
+        public string? Neighbourhood { get; set; }
     }
 }
 

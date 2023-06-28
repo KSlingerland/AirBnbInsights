@@ -60,3 +60,9 @@ export const loginRequest = {
 export const graphConfig = {
     graphMeEndpoint: "https://graph.microsoft.com/v1.0/me"
 };
+
+export const loginApiRequest = {
+    scopes: [
+      "api://6ef27471-0cfb-434e-83c0-0821612e715b/api.scope",
+    ],
+  };

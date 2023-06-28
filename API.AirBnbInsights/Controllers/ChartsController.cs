@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using API.AirBnbInsights.Models;
+using API.AirBnbInsights.Services.Interfaces;
 
 namespace API.AirBnbInsights.Controllers
 {
@@ -13,61 +8,42 @@ namespace API.AirBnbInsights.Controllers
     [ApiController]
     public class ChartsController : ControllerBase
     {
-        private readonly InsightsDbContext _context;
-
-        public ChartsController(InsightsDbContext context)
+        private readonly IChartsService _chartsService;
+        public ChartsController(IChartsService chartsService)
         {
-            _context = context;
+            _chartsService = chartsService;
         }
 
-        // GET: api/Charts/listings
-        [HttpGet("listings")]
-        public async Task<ActionResult<List<ChartSeries>>> GetListingsChart()
-        {
-          if (_context.Listings == null)
-          {
-              return NotFound();
-          }
+        //// GET: api/Charts/listings
+        //[HttpGet("listings")]
+        //public async Task<ActionResult<List<ChartSeries>>> GetListingsChart()
+        //{
+        //    if (_context.Listings == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var ListingCount = new ChartData
-            {
-                Primary = "Amount Of Listings",
-                Secondary = _context.Listings.Count()
-            };
+        //    var ListingCount = new ChartData
+        //    {
+        //        Primary = "Amount Of Listings",
+        //        Secondary = _context.Listings.Count()
+        //    };
 
-            var HostCount = new ChartData
-            {
-                Primary = "Amount of Hosts",
-                Secondary = _context.Listings.AsNoTracking().Select(x => x.HostId).Distinct().Count()
-            };
+        //    var HostCount = new ChartData
+        //    {
+        //        Primary = "Amount of Hosts",
+        //        Secondary = _context.Listings.AsNoTracking().Select(x => x.HostId).Distinct().Count()
+        //    };
 
-            var test = new ChartData
-            {
-                Primary = "Neibourhoods",
-                Secondary = _context.Listings.AsNoTracking().Select(x => x.NeighbourhoodCleansed).Distinct().Count()
-            };
+        //    var test = new ChartData
+        //    {
+        //        Primary = "Neibourhoods",
+        //        Secondary = _context.Listings.AsNoTracking().Select(x => x.NeighbourhoodCleansed).Distinct().Count()
+        //    };
 
-            return new List<ChartSeries>
-                {
+        //}
 
-                    new ChartSeries {
-                        Label = "Neibourhoods",
-                        ChartData = new List<ChartData>
-                        {
-                            test
-                        }
 
-                    },
-
-                    new ChartSeries{
-                        Label = "Hosts",
-                        ChartData = new List<ChartData>{
-                            HostCount
-                        }
-                    }
-                };
-
-        }
 
         //// GET: api/Charts/listings/hosts
         //[HttpGet("/listings/hosts")]
@@ -90,25 +66,18 @@ namespace API.AirBnbInsights.Controllers
         //    };
         //}
 
-        // GET: api/Charts/listings/neighbourhoods
+        //GET: api/charts/neighbourhoods
         [HttpGet("neighbourhoods")]
-        public async Task<ActionResult<List<ChartData>>> GetListingsPerNeighbourhood()
+        public async Task<ActionResult<List<ChartSeries>>> GetLitingsPerNeighbourhood()
         {
-            if (_context.Listings == null)
+            var chartData = await _chartsService.GetLitingsPerNeighbourhood();
+
+            if(chartData is not null)
             {
-                return NotFound();
+                return chartData;
             }
 
-            var chartData = _context.Listings
-            .GroupBy(l => l.NeighbourhoodCleansed)
-            .Select(g => new ChartData
-            {
-                Primary = g.Key,
-                Secondary = g.Count() // You can change this based on your requirements
-            })
-            .ToList();
-
-            return chartData;
+            return NotFound();
         }
     }
 }

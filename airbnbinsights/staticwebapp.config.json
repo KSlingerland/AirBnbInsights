@@ -1,0 +1,9 @@
+{
+    "globalHeaders": {
+    "Access-Control-Allow-Methods": "GET",
+    "X-Frame-Options": "sameorigin",
+    "Content-Security-Policy": "default-src https: data: blob: 'self'; style-src-elem https: 'self' 'unsafe-inline'; style-src https: 'self' 'unsafe-inline'; script-src-elem 'self' 'unsafe-inline'; script-src 'self' blob: 'unsafe-inline'; connect-src https: https://temp-wap-martijn.azurewebsites.net; img-src blob: data: https: 'self'; frame-src 'self'; frame-ancestors 'self'; font-src 'self'; media-src 'self'; object-src 'self'; manifest-src 'self'; form-action 'self'",
+    "Permissions-Policy": "geolocation=(self),midi=(),sync-xhr=(),microphone=(none),camera=(none),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()",
+    "Cache-Control": "no-cache, no-store, must-revalidate"
+  }
+}

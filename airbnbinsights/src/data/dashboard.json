@@ -1,0 +1,103 @@
+[{
+    "label": "Listings",
+    "data": [{
+        "primary": "Barking and Dagenham",
+        "secondary": 475
+    }, {
+        "primary": "Barnet",
+        "secondary": 1788
+    }, {
+        "primary": "Bexley",
+        "secondary": 412
+    }, {
+        "primary": "Brent",
+        "secondary": 2366
+    }, {
+        "primary": "Bromley",
+        "secondary": 643
+    }, {
+        "primary": "Camden",
+        "secondary": 4943
+    }, {
+        "primary": "City of London",
+        "secondary": 445
+    }, {
+        "primary": "Croydon",
+        "secondary": 1242
+    }, {
+        "primary": "Ealing",
+        "secondary": 1899
+    }, {
+        "primary": "Enfield",
+        "secondary": 687
+    }, {
+        "primary": "Greenwich",
+        "secondary": 1670
+    }, {
+        "primary": "Hackney",
+        "secondary": 5490
+    }, {
+        "primary": "Hammersmith and Fulham",
+        "secondary": 3260
+    }, {
+        "primary": "Haringey",
+        "secondary": 2033
+    }, {
+        "primary": "Harrow",
+        "secondary": 449
+    }, {
+        "primary": "Havering",
+        "secondary": 341
+    }, {
+        "primary": "Hillingdon",
+        "secondary": 719
+    }, {
+        "primary": "Hounslow",
+        "secondary": 1083
+    }, {
+        "primary": "Islington",
+        "secondary": 4142
+    }, {
+        "primary": "Kensington and Chelsea",
+        "secondary": 4959
+    }, {
+        "primary": "Kingston upon Thames",
+        "secondary": 571
+    }, {
+        "primary": "Lambeth",
+        "secondary": 4170
+    }, {
+        "primary": "Lewisham",
+        "secondary": 2184
+    }, {
+        "primary": "Merton",
+        "secondary": 1219
+    }, {
+        "primary": "Newham",
+        "secondary": 1905
+    }, {
+        "primary": "Redbridge",
+        "secondary": 704
+    }, {
+        "primary": "Richmond upon Thames",
+        "secondary": 1092
+    }, {
+        "primary": "Southwark",
+        "secondary": 4278
+    }, {
+        "primary": "Sutton",
+        "secondary": 310
+    }, {
+        "primary": "Tower Hamlets",
+        "secondary": 6083
+    }, {
+        "primary": "Waltham Forest",
+        "secondary": 1428
+    }, {
+        "primary": "Wandsworth",
+        "secondary": 3701
+    }, {
+        "primary": "Westminster",
+        "secondary": 8550
+    }]
+}]

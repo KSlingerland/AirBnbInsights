@@ -1,43 +1,38 @@
 import React from "react";
 import { Chart } from "react-charts";
+import placeholder from '../data/dashboard.json'
 
 const HostsBar = () => {
-  var data = [
-    {
-      label: "Neibourhoods",
-      data: [
-        {
-          primary: "Neibourhoods",
-          secondary: 33
-        }
-      ]
-    },
-    {
-      label: "Hosts",
-      data: [
-        {
-          primary: "Amount of Hosts",
-          secondary: 47619
-        }
-      ]
-    }
-  ]
 
+  // const { isLoading, error, data } = useQuery(['repoData'], () =>
+  //   api.dashboard.get(),
+  //   {
+  //     select: (data) => console.log(data)
+  //   }
+  // )
+
+  const data = placeholder
 
   const primaryAxis = React.useMemo(
     () => ({
-      getValue: datum => datum.primary,
+      getValue: (datum) => datum.primary,
     }),
     []
-  )
+  );
+
   const secondaryAxes = React.useMemo(
-    () => [
-      {
-        getValue: datum => datum.secondary,
-      },
-    ],
-    []
-  )
+  () => [
+    {
+      getValue: (datum) => datum.secondary,
+      elementType: 'bar',
+    },
+  ],
+  []
+);
+
+  // if (isLoading) return 'Loading...'
+
+  // if (error) return 'An error has occurred: ' + error.message
 
   return (
     <>
